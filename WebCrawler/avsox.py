@@ -1,3 +1,5 @@
+import sys
+sys.path.append('..')
 import re
 from lxml import etree
 import json
@@ -72,19 +74,26 @@ def getTag(a):  # 获取演员
     for i in a:
         d.append(i.get_text())
     return d
+def getSeries(htmlcode):
+    try:
+        html = etree.fromstring(htmlcode, etree.HTMLParser())  # //table/tr[1]/td[1]/text()
+        result1 = str(html.xpath('//span[contains(text(),"系列:")]/../span[2]/text()')).strip(" ['']")
+        return result1
+    except:
+        return ''
 
 def main(number):
-    a = get_html('https://avsox.host/cn/search/' + number)
+    html = get_html('https://tellme.pw/avsox')
+    site = etree.HTML(html).xpath('//div[@class="container"]/div/a/@href')[0]
+    a = get_html(site + '/cn/search/' + number)
     html = etree.fromstring(a, etree.HTMLParser())  # //table/tr[1]/td[1]/text()
     result1 = str(html.xpath('//*[@id="waterfall"]/div/a/@href')).strip(" ['']")
     if result1 == '' or result1 == 'null' or result1 == 'None':
-        a = get_html('https://avsox.host/cn/search/' + number.replace('-', '_'))
-        print(a)
+        a = get_html(site + '/cn/search/' + number.replace('-', '_'))
         html = etree.fromstring(a, etree.HTMLParser())  # //table/tr[1]/td[1]/text()
         result1 = str(html.xpath('//*[@id="waterfall"]/div/a/@href')).strip(" ['']")
         if result1 == '' or result1 == 'null' or result1 == 'None':
-            a = get_html('https://avsox.host/cn/search/' + number.replace('_', ''))
-            print(a)
+            a = get_html(site + '/cn/search/' + number.replace('_', ''))
             html = etree.fromstring(a, etree.HTMLParser())  # //table/tr[1]/td[1]/text()
             result1 = str(html.xpath('//*[@id="waterfall"]/div/a/@href')).strip(" ['']")
     web = get_html(result1)
@@ -108,8 +117,10 @@ def main(number):
         'actor_photo': getActorPhoto(web),
         'website': result1,
         'source': 'avsox.py',
+        'series': getSeries(info),
     }
     js = json.dumps(dic, ensure_ascii=False, sort_keys=True, indent=4, separators=(',', ':'), )  # .encode('UTF-8')
     return js
 
-#print(main('012717_472'))
+if __name__ == "__main__":
+    print(main('012717_472'))

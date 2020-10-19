@@ -1,7 +1,10 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
+import sys
+sys.path.append('../')
 import json
 import re
+from urllib.parse import urlencode
 
 from lxml import etree
 
@@ -14,7 +17,7 @@ from ADC_function import *
 
 def getTitle(text):
     html = etree.fromstring(text, etree.HTMLParser())
-    result = html.xpath('//*[@id="title"]/text()')[0]
+    result = html.xpath('//*[starts-with(@id, "title")]/text()')[0]
     return result
 
 
@@ -56,11 +59,11 @@ def getLabel(text):
     html = etree.fromstring(text, etree.HTMLParser())  # //table/tr[1]/td[1]/text()
     try:
         result = html.xpath(
-            "//td[contains(text(),'シリーズ：')]/following-sibling::td/a/text()"
+            "//td[contains(text(),'レーベル：')]/following-sibling::td/a/text()"
         )[0]
     except:
         result = html.xpath(
-            "//td[contains(text(),'シリーズ：')]/following-sibling::td/text()"
+            "//td[contains(text(),'レーベル：')]/following-sibling::td/text()"
         )[0]
     return result
 
@@ -93,9 +96,12 @@ def getRelease(text):
             "//td[contains(text(),'発売日：')]/following-sibling::td/a/text()"
         )[0].lstrip("\n")
     except:
-        result = html.xpath(
-            "//td[contains(text(),'発売日：')]/following-sibling::td/text()"
-        )[0].lstrip("\n")
+        try:
+            result = html.xpath(
+                "//td[contains(text(),'発売日：')]/following-sibling::td/text()"
+            )[0].lstrip("\n")
+        except:
+            result = "----"
     if result == "----":
         try:
             result = html.xpath(
@@ -108,7 +114,7 @@ def getRelease(text):
                 )[0].lstrip("\n")
             except:
                 pass
-    return result
+    return result.replace("/", "-")
 
 
 def getTag(text):
@@ -117,10 +123,24 @@ def getTag(text):
         result = html.xpath(
             "//td[contains(text(),'ジャンル：')]/following-sibling::td/a/text()"
         )
+        total = []
+        for i in result:
+            try:
+                total.append(translateTag_to_sc(i))
+            except:
+                pass
+        return total
     except:
         result = html.xpath(
             "//td[contains(text(),'ジャンル：')]/following-sibling::td/text()"
         )
+        total = []
+        for i in result:
+            try:
+                total.append(translateTag_to_sc(i))
+            except:
+                pass
+        return total
     return result
 
 
@@ -174,6 +194,22 @@ def getOutline(text):
     return result
 
 
+def getSeries(text):
+    try:
+        html = etree.fromstring(text, etree.HTMLParser())  # //table/tr[1]/td[1]/text()
+        try:
+            result = html.xpath(
+                "//td[contains(text(),'シリーズ：')]/following-sibling::td/a/text()"
+            )[0]
+        except:
+            result = html.xpath(
+                "//td[contains(text(),'シリーズ：')]/following-sibling::td/text()"
+            )[0]
+        return result
+    except:
+        return ""
+
+
 def main(number):
     # fanza allow letter + number + underscore, normalize the input here
     # @note: I only find the usage of underscore as h_test123456789
@@ -191,11 +227,17 @@ def main(number):
         "https://www.dmm.co.jp/mono/anime/-/detail/=/cid=",
         "https://www.dmm.co.jp/digital/videoc/-/detail/=/cid=",
         "https://www.dmm.co.jp/digital/nikkatsu/-/detail/=/cid=",
+        "https://www.dmm.co.jp/rental/-/detail/=/cid=",
     ]
     chosen_url = ""
+
     for url in fanza_urls:
         chosen_url = url + fanza_search_number
-        htmlcode = get_html(chosen_url)
+        htmlcode = get_html(
+            "https://www.dmm.co.jp/age_check/=/declared=yes/?{}".format(
+                urlencode({"rurl": chosen_url})
+            )
+        )
         if "404 Not Found" not in htmlcode:
             break
     if "404 Not Found" in htmlcode:
@@ -225,6 +267,7 @@ def main(number):
             "actor_photo": "",
             "website": chosen_url,
             "source": "fanza.py",
+            "series": getSeries(htmlcode),
         }
     except:
         data = {
@@ -266,7 +309,5 @@ def main_htmlcode(number):
 
 
 if __name__ == "__main__":
-    # print(main("DV-1562"))
-    # input("[+][+]Press enter key exit, you can check the error messge before you exit.\n[+][+]按回车键结束，你可以在结束之前查看和错误信息。")
-    # print(main("ipx292"))
-    pass
+    print(main("DV-1562"))
+    print(main("96fad1217"))

@@ -1,3 +1,5 @@
+import sys
+sys.path.append('../')
 import json
 import bs4
 from bs4 import BeautifulSoup
@@ -23,7 +25,7 @@ def main(number: str):
 
     # Scraping
     result = get_html(
-        "http://www.m45e.com/cn/vl_searchbyid.php?keyword={}".format(number),
+        "http://www.javlibrary.com/cn/vl_searchbyid.php?keyword={}".format(number),
         cookies=cookies,
         ua=user_agent,
         return_type="object"
@@ -49,6 +51,7 @@ def main(number: str):
             "number": get_table_el_td(soup, "video_id"),
             "release": get_table_el_td(soup, "video_date"),
             "runtime": get_from_xpath(lx, '//*[@id="video_length"]/table/tr/td[2]/span/text()'),
+            "series":'',
         }
     else:
         dic = {}
@@ -103,7 +106,7 @@ def get_cover(lx: html.HtmlComment) -> str:
 
 
 if __name__ == "__main__":
-    # lists = ["DVMC-003", "GS-0167", "JKREZ-001", "KMHRS-010", "KNSD-023"]
-    lists = ["DVMC-003"]
+    lists = ["DVMC-003", "GS-0167", "JKREZ-001", "KMHRS-010", "KNSD-023"]
+    #lists = ["DVMC-003"]
     for num in lists:
         print(main(num))
