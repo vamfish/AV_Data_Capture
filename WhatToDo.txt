@@ -1,2 +1,88 @@
 影片分类：单人，多人，个人选集，多人选集，素人，素人选集 --- 可以通过Tag来分类
 Tag翻译：需要修正，主要是和分类相关的一些Tag需要统一翻译
+
+跳过18岁验证
+
+Bug: 可能是因为没有-poster图片 （修改javdb中的imagecut为1即可）
+[*]======================================================
+[!] - 4.59% [8/174] -
+[!]Making Data for [.\091520_358.mp4], the number is [091520-358]
+[+]select javbus
+[+]select javdb
+[+] ---Debug info---
+[+]  - actor       : 志戸まなみ
+[+]  - cover       : https://jdbimgs.com/covers/yw/yW4VZ.jpg
+[+]  - cover_small :
+[+]  - director    :
+[+]  - imagecut    : 3
+[+]  - label       :
+[+]  - number      : 091520_358
+[+]  - outline     : 0 characters
+[+]  - release     :
+[+]  - runtime     : 43 分鍾
+[+]  - series      :
+[+]  - source      : javdb.py
+[+]  - studio      : pacopacomama
+[+]  - tag         : ['美女', '中出', '深喉', '苗條', '漂亮屁股', '美腳', '無套內射', '淫蕩手淫', '口交']
+[+]  - title       : 無碼 官能小説を読みながらハメまくる人妻
+[+]  - website     : https://javdb.com/v/yW4VZ
+[+]  - naming_rule : 091520_358-無碼 官能小説を読みながらハメまくる人妻
+[+]  - location_rule : 志戸まなみ/091520_358
+[+]  - actor_list  : ['志戸まなみ']
+[+] ---Debug info---
+[-]Image Download :  Connect retry 1/3
+[-]Image Download :  Connect retry 2/3
+[-]Image Download :  Connect retry 3/3
+[-]Connect Failed! Please check your Proxy or Network!
+[-]Move to Failed output folder
+[+]Image Downloaded! JAV_output/志戸まなみ/091520_358/091520_358-poster.jpg
+[+]Image Downloaded! JAV_output/志戸まなみ/091520_358/091520_358-fanart.jpg
+[+]Wrote!            JAV_output/志戸まなみ/091520_358/091520_358.nfo
+Traceback (most recent call last):
+  File "AV_Data_Capture.py", line 162, in <module>
+  File "AV_Data_Capture.py", line 71, in create_data_and_move
+  File "core.py", line 569, in core_main
+  File "core.py", line 428, in paste_file_to_folder
+FileNotFoundError: [WinError 2] 系统找不到指定的文件。: '.\\091520_358.mp4' -> 'JAV_output/志戸まなみ/091520_358/091520_358.mp4'
+[2524] Failed to execute script AV_Data_Capture
+[*]======================================================
+[!] - 7.22% [12/166] -
+[!]Making Data for [.\092620_363.mp4], the number is [092620-363]
+[+]select javbus
+[+]select javdb
+[+] ---Debug info---
+[+]  - actor       : 新城由衣
+[+]  - cover       : https://jdbimgs.com/covers/2k/2kgPP.jpg
+[+]  - cover_small :
+[+]  - director    :
+[+]  - imagecut    : 3
+[+]  - label       :
+[+]  - number      : 092620_363
+[+]  - outline     : 0 characters
+[+]  - release     :
+[+]  - runtime     : 59 分鍾
+[+]  - series      :
+[+]  - source      : javdb.py
+[+]  - studio      : pacopacomama
+[+]  - tag         : ['美女', '美乳', '貧乳', '中出', '苗條', '泳裝', '漂亮屁股', '美腳', '無套內射', '口交', '打手槍']
+[+]  - title       : 無碼 玄関先でスッポンポン 23 〜マイクロビキニで誘惑するスレンダー美人妻〜 シリーズ特設
+[+]  - website     : https://javdb.com/v/2kgPP
+[+]  - naming_rule : 092620_363-無碼 玄関先でスッポンポン 23 〜マイクロビキニで誘惑するスレンダー美人妻〜 シリーズ特設
+[+]  - location_rule : 新城由衣/092620_363
+[+]  - actor_list  : ['新城由衣']
+[+] ---Debug info---
+[-]Image Download :  Connect retry 1/3
+[-]Image Download :  Connect retry 2/3
+[-]Image Download :  Connect retry 3/3
+[-]Connect Failed! Please check your Proxy or Network!
+[-]Move to Failed output folder
+[+]Image Downloaded! JAV_output/新城由衣/092620_363/092620_363-poster.jpg
+[+]Image Downloaded! JAV_output/新城由衣/092620_363/092620_363-fanart.jpg
+[+]Wrote!            JAV_output/新城由衣/092620_363/092620_363.nfo
+Traceback (most recent call last):
+  File "AV_Data_Capture.py", line 162, in <module>
+  File "AV_Data_Capture.py", line 71, in create_data_and_move
+  File "core.py", line 569, in core_main
+  File "core.py", line 428, in paste_file_to_folder
+FileNotFoundError: [WinError 2] 系统找不到指定的文件。: '.\\092620_363.mp4' -> 'JAV_output/新城由衣/092620_363/092620_363.mp4'
+[12204] Failed to execute script AV_Data_Capture

@@ -3,6 +3,7 @@ import os.path
 import re
 import shutil
 import platform
+import time
 
 from PIL import Image
 from ADC_function import *

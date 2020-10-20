@@ -118,23 +118,36 @@ def getSeries(a):
 def main(number):
     try:
         number = number.upper()
+        cookies = "over18=1; _ga=GA1.2.770339407.1599876509; __cfduid=d04e40c650be8e4b4521116f068db19601601921011; remember_me_token=eyJfcmFpbHMiOnsibWVzc2FnZSI6IklrUkZlbVEwYVdkWWNFRTJRMkp1YXpNMGMyZDRJZz09IiwiZXhwIjoiMjAyMC0xMC0yMFQxODowNjo1Mi4wMDBaIiwicHVyIjoiY29va2llLnJlbWVtYmVyX21lX3Rva2VuIn19--2e462d49af05e5d68dd3e7b88c5b5679068971c7; locale=zh; __cf_bm=8c83e189cdbf63488f1aec58fe1c482e2808c91a-1603171159-1800-AcRaNyJSi6+3eUBrqqXhDI9QEBN4lwUsJYKrFmLPK6s6Iu5WngWMWEmUn6OSWbh/Y76H988gKi4nZMeX5XxtK469WsGO+vly0JkJIe3aWSjBWIFnlR4QxulE4mhn9fn+87CzvdJr/2GLGALMbsfAjaQ=; _jdb_session=FarzfJEIz%2FHwHsz4fLMm%2F8VCf2ELnuvhQCtgRiveUSAvzPrMpNeUgrsMaHuTup%2BgiVd7ASLLUeQ4EN3eyf7TtWfSxJPM6GFcfFF5KtA6beiSwcBFMZMo1b5tKBQ1N1pOOxc5lDItz%2F8LBenEGqHT%2BuSermjlf%2FEKbCP2bRqmVRVrA5ElD3hX4QefW5PKvflF4UQ4jjw8y1SFVGqfptyHDzl21vUi02jCvkyODAI8hsUPR8aE52waVFairaExKxRHM1qHE6uTtyXiyVHwi9ndhuQpq%2FzEjYL8au6ZPvjAPF17s5Nyovh9y54%2BOK3h8AwpA8%2FCO2SqnWKkdWnQwFDtR%2Fw9--byFg42qWmvN2Xa%2By--JOA%2BCfd97yeNFcmsV9KXXQ%3D%3D"
+        cookie_dict = {}
+        for cookie in cookies.split('; '):
+            key, value = cookie.split('=', 1)
+            cookie_dict[key] = value
         try:
-            query_result = get_html('https://javdb.com/search?q=' + number + '&f=all')
+            query_result = get_html('https://javdb.com/search?q=' + number + '&f=all', cookies=cookie_dict)
         except:
-            query_result = get_html('https://javdb4.com/search?q=' + number + '&f=all')
+            query_result = get_html('https://javdb4.com/search?q=' + number + '&f=all', cookies=cookie_dict)
         html = etree.fromstring(query_result, etree.HTMLParser())  # //table/tr[1]/td[1]/text()
         # javdb sometime returns multiple results,
         # and the first elememt maybe not the one we are looking for
         # iterate all candidates and find the match one
         urls = html.xpath('//*[@id="videos"]/div/div/a/@href')
         ids =html.xpath('//*[@id="videos"]/div/div/a/div[contains(@class, "uid")]/text()')
-        correct_url = urls[ids.index(number)]
-        detail_page = get_html('https://javdb.com' + correct_url)
+        # print search results
+        print('Search Resutls:', ids)
+        try:
+            correct_url = urls[ids.index(number)]
+        except:
+            correct_url = urls[ids.index(number.replace('-', '_'))]
+        detail_page = get_html('https://javdb.com' + correct_url, cookies=cookie_dict)
 
-        # no cut image by default
-        imagecut = 3
+        # cut image by default
+        imagecut = 1
         # If gray image exists ,then replace with normal cover
-        cover_small = getCover_small(query_result, index=ids.index(number))
+        try:
+            cover_small = getCover_small(query_result, index=urls.index(correct_url))
+        except:
+            cover_small = ''
         if 'placeholder' in cover_small:
             # replace wit normal cover and cut it
             imagecut = 1
@@ -167,7 +180,7 @@ def main(number):
             'series': getSeries(detail_page),
         }
     except Exception as e:
-        # print(e)
+        print(e)
         dic = {"title": ""}
     js = json.dumps(dic, ensure_ascii=False, sort_keys=True, indent=4, separators=(',', ':'), )  # .encode('UTF-8')
     return js
